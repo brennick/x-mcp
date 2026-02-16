@@ -1,4 +1,7 @@
 node_modules/
 build/
+dist/
 .env
 .claude
+.DS_Store
+*.log

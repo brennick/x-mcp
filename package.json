@@ -1,7 +1,29 @@
 {
   "name": "x-mcp",
   "version": "1.0.0",
+  "description": "MCP server providing read-only access to the X (Twitter) API v2",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brennick/x-mcp.git"
+  },
+  "homepage": "https://github.com/brennick/x-mcp",
+  "bugs": {
+    "url": "https://github.com/brennick/x-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "x",
+    "twitter",
+    "api",
+    "claude",
+    "ai"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node build/index.js"
