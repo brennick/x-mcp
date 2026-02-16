@@ -123,6 +123,7 @@ Search recent tweets (last 7 days) using X search query syntax. Supports operato
   - `query` (string, required) — Search query (max 512 characters)
   - `max_results` (number, optional) — Results to return (10–100, default 10)
   - `tweet_fields` (array, optional) — Tweet fields to return
+  - `pagination_token` (string, optional) — Token for the next page of results
 - **Endpoint:** `GET /2/tweets/search/recent`
 
 ### `get_user_tweets`
@@ -133,6 +134,7 @@ Get recent tweets by a user. Requires the user's numeric ID — use `lookup_user
   - `user_id` (string, required) — The numeric user ID
   - `max_results` (number, optional) — Tweets to return (5–100, default 10)
   - `tweet_fields` (array, optional) — Tweet fields to return
+  - `pagination_token` (string, optional) — Token for the next page of results
 - **Endpoint:** `GET /2/users/{user_id}/tweets`
 
 ### `get_followers`
@@ -143,6 +145,7 @@ Get a list of users who follow the specified user. Requires the user's numeric I
   - `user_id` (string, required) — The numeric user ID
   - `max_results` (number, optional) — Followers to return (1–1000, default 100)
   - `user_fields` (array, optional) — User fields to return
+  - `pagination_token` (string, optional) — Token for the next page of results
 - **Endpoint:** `GET /2/users/{user_id}/followers`
 
 ### `get_following`
@@ -153,6 +156,7 @@ Get a list of users the specified user is following. Requires the user's numeric
   - `user_id` (string, required) — The numeric user ID
   - `max_results` (number, optional) — Accounts to return (1–1000, default 100)
   - `user_fields` (array, optional) — User fields to return
+  - `pagination_token` (string, optional) — Token for the next page of results
 - **Endpoint:** `GET /2/users/{user_id}/following`
 
 ### `get_liking_users`
@@ -163,6 +167,7 @@ Get a list of users who liked a specific tweet.
   - `tweet_id` (string, required) — The numeric tweet ID
   - `max_results` (number, optional) — Users to return (1–100, default 100)
   - `user_fields` (array, optional) — User fields to return
+  - `pagination_token` (string, optional) — Token for the next page of results
 - **Endpoint:** `GET /2/tweets/{tweet_id}/liking_users`
 
 ### `get_retweeters`
@@ -173,6 +178,7 @@ Get a list of users who retweeted a specific tweet.
   - `tweet_id` (string, required) — The numeric tweet ID
   - `max_results` (number, optional) — Users to return (1–100, default 100)
   - `user_fields` (array, optional) — User fields to return
+  - `pagination_token` (string, optional) — Token for the next page of results
 - **Endpoint:** `GET /2/tweets/{tweet_id}/retweeted_by`
 
 ### `get_list_tweets`
@@ -183,6 +189,7 @@ Get recent tweets from an X List by list ID.
   - `list_id` (string, required) — The numeric list ID
   - `max_results` (number, optional) — Tweets to return (1–100, default 100)
   - `tweet_fields` (array, optional) — Tweet fields to return
+  - `pagination_token` (string, optional) — Token for the next page of results
 - **Endpoint:** `GET /2/lists/{list_id}/tweets`
 
 ## Project Structure

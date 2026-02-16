@@ -24,18 +24,24 @@ export function registerGetListTweets(server: McpServer) {
         .array(z.enum(TWEET_FIELDS))
         .optional()
         .describe("Optional list of tweet fields to return."),
+      pagination_token: z
+        .string()
+        .optional()
+        .describe("Token for the next page of results (from a previous response's next_token)."),
     },
     READ_ONLY_ANNOTATIONS,
-    async ({ list_id, max_results, tweet_fields }) => {
+    async ({ list_id, max_results, tweet_fields, pagination_token }) => {
       const selectedFields = tweet_fields ?? [...DEFAULT_TWEET_FIELDS];
+      const params: Record<string, string> = {
+        max_results: String(max_results ?? 100),
+        "tweet.fields": selectedFields.join(","),
+        expansions: "author_id",
+        "user.fields": "name,username,verified,verified_type",
+      };
+      if (pagination_token) params.pagination_token = pagination_token;
       const result = await xApiFetch(
         `lists/${encodeURIComponent(list_id)}/tweets`,
-        {
-          max_results: String(max_results ?? 100),
-          "tweet.fields": selectedFields.join(","),
-          expansions: "author_id",
-          "user.fields": "name,username,verified,verified_type",
-        }
+        params
       );
 
       if (isError(result)) return result;
@@ -44,9 +50,11 @@ export function registerGetListTweets(server: McpServer) {
         return successResult("No tweets found in this list.", result.json);
       }
 
+      const nextToken = (result.json.meta as any)?.next_token as string | undefined;
       return successResult(
         formatTweets(result.data as unknown[], result.json.includes),
-        result.json
+        result.json,
+        nextToken
       );
     }
   );

@@ -7,13 +7,18 @@ export function errorResult(message: string): CallToolResult {
   };
 }
 
-export function successResult(formatted: string, json: unknown): CallToolResult {
-  return {
-    content: [
-      { type: "text", text: formatted },
-      { type: "text", text: `\n---\nRaw JSON:\n${JSON.stringify(json, null, 2)}` },
-    ],
-  };
+export function successResult(formatted: string, json: unknown, nextToken?: string): CallToolResult {
+  const parts = [
+    { type: "text" as const, text: formatted },
+    { type: "text" as const, text: `\n---\nRaw JSON:\n${JSON.stringify(json, null, 2)}` },
+  ];
+  if (nextToken) {
+    parts.splice(1, 0, {
+      type: "text" as const,
+      text: `\n---\nNext page token: ${nextToken}`,
+    });
+  }
+  return { content: parts };
 }
 
 type FetchSuccess = { data: unknown; json: Record<string, unknown> };

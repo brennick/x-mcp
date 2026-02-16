@@ -25,17 +25,23 @@ export function registerSearchTweets(server: McpServer) {
         .array(z.enum(TWEET_FIELDS))
         .optional()
         .describe("Optional list of tweet fields to return."),
+      pagination_token: z
+        .string()
+        .optional()
+        .describe("Token for the next page of results (from a previous response's next_token)."),
     },
     READ_ONLY_ANNOTATIONS,
-    async ({ query, max_results, tweet_fields }) => {
+    async ({ query, max_results, tweet_fields, pagination_token }) => {
       const selectedFields = tweet_fields ?? [...DEFAULT_TWEET_FIELDS];
-      const result = await xApiFetch("tweets/search/recent", {
+      const params: Record<string, string> = {
         query,
         max_results: String(max_results ?? 10),
         "tweet.fields": selectedFields.join(","),
         expansions: "author_id",
         "user.fields": "name,username,verified,verified_type",
-      });
+      };
+      if (pagination_token) params.next_token = pagination_token;
+      const result = await xApiFetch("tweets/search/recent", params);
 
       if (isError(result)) return result;
 
@@ -43,9 +49,11 @@ export function registerSearchTweets(server: McpServer) {
         return successResult("No tweets found matching the query.", result.json);
       }
 
+      const nextToken = (result.json.meta as any)?.next_token as string | undefined;
       return successResult(
         formatTweets(result.data as unknown[], result.json.includes),
-        result.json
+        result.json,
+        nextToken
       );
     }
   );
